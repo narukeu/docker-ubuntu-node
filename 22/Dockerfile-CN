@@ -1,5 +1,12 @@
 FROM ubuntu:noble
 
+# 这个镜像只支持 amd64 和 arm64，所以简单两个判断。
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
+    sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list.d/ubuntu.sources; \
+    else \
+    sed -i 's@//ports.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list.d/ubuntu.sources; \
+    fi
+
 RUN apt-get clean && apt-get update && apt-get install -y curl build-essential ca-certificates gnupg
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash
