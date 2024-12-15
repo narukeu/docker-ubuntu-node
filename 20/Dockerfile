@@ -1,6 +1,6 @@
 FROM ubuntu:jammy
 
-RUN apt-get update && apt-get install -y curl build-essential
+RUN apt-get clean && apt-get update && apt-get install -y curl build-essential ca-certificates gnupg
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash
 

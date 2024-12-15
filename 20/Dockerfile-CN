@@ -1,0 +1,29 @@
+FROM ubuntu:jammy
+
+# 设置中科大源加速
+
+# 这个镜像只支持 amd64 和 arm64，所以简单两个判断。
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
+    sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+    else \
+    sed -i -e 's@//ports.ubuntu.com/\? @//ports.ubuntu.com/ubuntu-ports @g' \
+    -e 's@//ports.ubuntu.com@//mirrors.ustc.edu.cn@g' \
+    /etc/apt/sources.list; \
+    fi
+
+RUN apt-get clean && apt-get update && apt-get install -y curl build-essential ca-certificates gnupg
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash
+
+RUN apt-get install -y nodejs
+
+COPY docker-entrypoint.sh /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+RUN node -v
+RUN npm -v
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD [ "node" ]
