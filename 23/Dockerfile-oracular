@@ -1,0 +1,24 @@
+FROM ubuntu:oracular
+
+RUN apt-get clean && apt-get update
+
+RUN apt-get upgrade -y
+
+RUN apt-get install -y curl build-essential ca-certificates gnupg
+
+RUN curl -fsSL https://deb.nodesource.com/setup_23.x | bash
+
+RUN apt-get install -y nodejs
+
+COPY docker-entrypoint.sh /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+RUN node -v
+RUN npm -v
+
+RUN apt-get clean
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD [ "node" ]
