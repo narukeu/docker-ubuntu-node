@@ -1,6 +1,10 @@
 FROM ubuntu:noble
 
-RUN apt-get clean && apt-get update && apt-get install -y curl build-essential ca-certificates gnupg
+RUN apt-get clean && apt-get update
+
+RUN apt-get upgrade -y
+
+RUN apt-get install -y curl build-essential ca-certificates gnupg
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash
 
@@ -12,6 +16,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 RUN node -v
 RUN npm -v
+
+RUN apt-get clean
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
